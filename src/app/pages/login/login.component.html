@@ -1,0 +1,19 @@
+<app-default-login-layout title="Realize seu Login" btnPrincipal="Login" btnSecundario="Cadastro" (submit)="submit()"
+    (navigate)="navigate()">
+
+    <form [formGroup]="loginForm" (ngSubmit)="submit()">
+        <app-input formControlName="email" type="email" placeholder="Email" label="Email" inputName="email">
+
+            <img src="/Login.svg">
+
+        </app-input>
+
+        <app-input formControlName="password" type="password" placeholder="Senha" label="Senha" inputName="password" #password>
+            <button (click)="passwordVisible()">
+                <img src="/Password.svg">
+            </button>
+        </app-input>
+    </form>
+
+
+</app-default-login-layout>

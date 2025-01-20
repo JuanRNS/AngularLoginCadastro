@@ -1,0 +1,17 @@
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 34px;
+
+    button {
+        border: none;
+        outline: none; 
+        background: transparent; 
+      }
+    img {
+        width: 30px;
+        height: 30px;
+    }
+}

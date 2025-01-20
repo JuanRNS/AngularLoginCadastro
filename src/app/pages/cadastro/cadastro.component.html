@@ -1,0 +1,23 @@
+<app-default-login-layout title="Realize seu Login" btnPrincipal="Concluir Cadastro" btnSecundario="Ir para Login" (submit)="submit()"
+(navigate)="navigate()">
+    <form>
+
+        <app-input formControlName="name" type="text" placeholder="Nome" label="Nome" inputName="name">
+            <img src="/Login.svg">
+        </app-input>    
+        <app-input formControlName="email" type="email" placeholder="Email" label="Email" inputName="email">
+            <img src="/Login.svg">
+        </app-input>
+        <app-input formControlName="password" type="password" placeholder="Senha" label="Senha" inputName="password">
+            <button>
+                <img src="/Password.svg">
+            </button>
+        </app-input>
+        <app-input formControlName="password" type="password" placeholder="Confirme a Senha" label="Confirme a Senha" inputName="password">
+            <button>
+                <img src="/Password.svg">
+            </button>
+        </app-input>
+    </form>
+
+</app-default-login-layout>
