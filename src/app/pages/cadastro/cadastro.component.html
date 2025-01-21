@@ -1,6 +1,6 @@
 <app-default-login-layout title="Realize seu Login" btnPrincipal="Concluir Cadastro" btnSecundario="Ir para Login" (submit)="submit()"
 (navigate)="navigate()">
-    <form>
+    <form [formGroup]="cadastroForm" (ngSubmit)="submit()">
 
         <app-input formControlName="name" type="text" placeholder="Nome" label="Nome" inputName="name">
             <img src="/Login.svg">
@@ -13,7 +13,7 @@
                 <img src="/Password.svg">
             </button>
         </app-input>
-        <app-input formControlName="password" type="password" placeholder="Confirme a Senha" label="Confirme a Senha" inputName="password">
+        <app-input formControlName="confirmPassword" type="password" placeholder="Confirme a Senha" label="Confirme a Senha" inputName="confirmPassword">
             <button>
                 <img src="/Password.svg">
             </button>

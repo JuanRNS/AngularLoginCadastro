@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { DefaultLoginLayoutComponent } from "../../components/default-login-layout/default-login-layout.component";
 import { InputComponent } from "../../components/input/input.component";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
+import { DadosService } from '../../service/dados.service';
 
 interface CadastroForm {
   name: FormControl;
@@ -14,7 +15,7 @@ interface CadastroForm {
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [DefaultLoginLayoutComponent, InputComponent],
+  imports: [DefaultLoginLayoutComponent, InputComponent, ReactiveFormsModule],
   templateUrl: './cadastro.component.html',
   styleUrl: './cadastro.component.scss'
 })
@@ -22,7 +23,8 @@ export class CadastroComponent {
   cadastroForm!: FormGroup<CadastroForm>;
 
 
-  constructor(private route: Router){
+  constructor(private route: Router, 
+    private localStorage: DadosService){
     this.cadastroForm = new FormGroup<CadastroForm>({
       name: new FormControl('',[Validators.required, Validators.minLength(5)]),
       email: new FormControl('',[Validators.required, Validators.email]),
@@ -33,12 +35,12 @@ export class CadastroComponent {
 
   submit(){
     if(this.cadastroForm.valid){
-      const {name, email, password, confirmPassword} = this.cadastroForm.value;
-      alert("Cadastro realizado com sucesso!"
-        + "Nome " + name
-        + "Email " + email
-        + "Senha " + password
-      );
+      const{name, email, password, confirmPassword} = this.cadastroForm.value;
+      this.localStorage.setItem('cadastro', { name, email, password, confirmPassword });
+      alert('Cadastro realizado com sucesso!'); 
+    }
+    else{
+      alert('Preencha todos os campos corretamente!');
     }
   }
   navigate(){

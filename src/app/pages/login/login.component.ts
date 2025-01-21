@@ -3,6 +3,7 @@ import { DefaultLoginLayoutComponent } from '../../components/default-login-layo
 import { InputComponent } from '../../components/input/input.component';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { DadosService } from '../../service/dados.service';
 
 interface loginForm {
   email: FormControl;
@@ -22,7 +23,8 @@ export class LoginComponent {
   
 
   constructor(
-    private route: Router
+    private route: Router,
+    private localStorage : DadosService
   ) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -31,24 +33,30 @@ export class LoginComponent {
   }
 
   submit() {
-    if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
+    const dados = this.localStorage.getItem<any>('cadastro');
+    
+    if (dados) {
+      const {email, password} = this.loginForm.value;
+      if (email === dados.email && password === dados.password) {
+        alert('Login realizado com sucesso!' 
+          + '\n'
+          + dados.name 
+          + '\n'
+          + dados.email
+          + '\n'
+          + dados.password
+        );
+      } else {
+        alert('Email ou senha incorretos!');
+      }
+    }
 
-      alert("Login confirmado e realizado com sucesso!"
-        + "Email " + email
-        + "Senha " + password
-      );
-    }
-    else {
-      alert("Preencha os campos corretamente!");
-    }
   }
 
   navigate() {
     this.route.navigate(['cadastro']);
   }
   passwordVisible() {
-    const passwordInput = document.getElementById('password') as HTMLInputElement;
-    passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+    
   }
 }
