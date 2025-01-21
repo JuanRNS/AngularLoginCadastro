@@ -23,27 +23,29 @@ export class CadastroComponent {
   cadastroForm!: FormGroup<CadastroForm>;
 
 
-  constructor(private route: Router, 
-    private localStorage: DadosService){
+  constructor(private route: Router,
+    private localStorage: DadosService) {
     this.cadastroForm = new FormGroup<CadastroForm>({
-      name: new FormControl('',[Validators.required, Validators.minLength(5)]),
-      email: new FormControl('',[Validators.required, Validators.email]),
-      password: new FormControl('',[Validators.required, Validators.minLength(6)]),
-      confirmPassword: new FormControl('',[Validators.required, Validators.minLength(6)]),
+      name: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
     })
   }
 
-  submit(){
-    if(this.cadastroForm.valid){
-      const{name, email, password, confirmPassword} = this.cadastroForm.value;
-      this.localStorage.setItem('cadastro', { name, email, password, confirmPassword });
-      alert('Cadastro realizado com sucesso!'); 
-    }
-    else{
-      alert('Preencha todos os campos corretamente!');
+  submit() {
+    if (this.cadastroForm.valid) {
+      const { name, email, password, confirmPassword } = this.cadastroForm.value;
+      if (password === confirmPassword) {
+        this.localStorage.setItem('cadastro', { name, email, password, confirmPassword });
+        alert('Cadastro realizado com sucesso!');
+      }
+      else {
+        alert('Preencha todos os campos corretamente!' + '\n' + 'As senhas não são iguais!');
+      }
     }
   }
-  navigate(){
+  navigate() {
     this.route.navigate(['login']);
   }
 }
