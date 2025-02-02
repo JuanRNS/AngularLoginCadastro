@@ -3,7 +3,9 @@ import { DefaultLoginLayoutComponent } from "../../components/default-login-layo
 import { InputComponent } from "../../components/input/input.component";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { DadosService } from '../../service/dados.service';
+import { cadastroService } from '../../service/cadastros.service';
+import { HttpClientModule } from '@angular/common/http';
+
 
 interface CadastroForm {
   name: FormControl;
@@ -15,7 +17,8 @@ interface CadastroForm {
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [DefaultLoginLayoutComponent, InputComponent, ReactiveFormsModule],
+  imports: [DefaultLoginLayoutComponent, InputComponent, ReactiveFormsModule,HttpClientModule],
+  providers: [cadastroService],
   templateUrl: './cadastro.component.html',
   styleUrl: './cadastro.component.scss'
 })
@@ -24,7 +27,8 @@ export class CadastroComponent {
 
 
   constructor(private route: Router,
-    private localStorage: DadosService) {
+    private cadastroService: cadastroService) {
+
     this.cadastroForm = new FormGroup<CadastroForm>({
       name: new FormControl('', [Validators.required, Validators.minLength(5)]),
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -34,16 +38,17 @@ export class CadastroComponent {
   }
 
   submit() {
-    if (this.cadastroForm.valid) {
-      const { name, email, password, confirmPassword } = this.cadastroForm.value;
-      if (password === confirmPassword) {
-        this.localStorage.setItem('cadastro', { name, email, password, confirmPassword });
-        alert('Cadastro realizado com sucesso!');
+    this.cadastroService.cadastro(this.cadastroForm.value.name, this.cadastroForm.value.email, this.cadastroForm.value.password)
+    .subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.log(error);
       }
-      else {
-        alert('Preencha todos os campos corretamente!' + '\n' + 'As senhas não são iguais!');
-      }
-    }
+    });
+  
+    this.route.navigate(['login']);
   }
   navigate() {
     this.route.navigate(['login']);

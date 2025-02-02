@@ -4,6 +4,8 @@ import { InputComponent } from '../../components/input/input.component';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DadosService } from '../../service/dados.service';
+import { LoginService } from '../../service/login.service';
+import { HttpClientModule } from '@angular/common/http';
 
 interface loginForm {
   email: FormControl;
@@ -13,7 +15,8 @@ interface loginForm {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [DefaultLoginLayoutComponent, InputComponent, ReactiveFormsModule],
+  imports: [DefaultLoginLayoutComponent, InputComponent, ReactiveFormsModule, HttpClientModule],
+  providers: [LoginService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -24,7 +27,7 @@ export class LoginComponent {
 
   constructor(
     private route: Router,
-    private localStorage : DadosService
+    private loginservice: LoginService
   ) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -33,23 +36,14 @@ export class LoginComponent {
   }
 
   submit() {
-    const dados = this.localStorage.getItem<any>('cadastro');
-    
-    if (dados) {
-      const {email, password} = this.loginForm.value;
-      if (email === dados.email && password === dados.password) {
-        alert('Login realizado com sucesso!' 
-          + '\n'
-          + dados.name 
-          + '\n'
-          + dados.email
-          + '\n'
-          + dados.password
-        );
-      } else {
-        alert('Email ou senha incorretos!');
+    this.loginservice.login(this.loginForm.value.email, this.loginForm.value.password).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.log(error);
       }
-    }
+    });
 
   }
 
